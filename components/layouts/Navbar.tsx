@@ -26,7 +26,7 @@ export default function Navbar() {
 
         {/* Right side - User Info */}
         <div className="flex items-center gap-4">
-          <div className="text-right">
+          <div className="text-right hidden md:block">
             <p className="text-sm font-medium text-gray-800">Admin User</p>
             <p className="text-xs text-gray-500">Dispatcher</p>
           </div>
