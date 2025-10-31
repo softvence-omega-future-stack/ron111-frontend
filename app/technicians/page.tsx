@@ -2,6 +2,8 @@
 
 import { useState, ChangeEvent } from "react";
 import { Plus, Phone, MapPin, X, Upload } from "lucide-react";
+import Wrapper from "@/components/common/Wrapper";
+import Link from "next/link";
 
 type Technician = {
   id: number;
@@ -153,7 +155,8 @@ export default function TechniciansPage() {
   };
 
   return (
-    <div>
+    <Wrapper>
+      <div>
       {/* Header */}
       <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between mb-6 gap-4">
         <div className="flex flex-col items-center lg:items-start">
@@ -227,83 +230,58 @@ export default function TechniciansPage() {
               </div>
               <div className="flex items-center gap-2">
                 <button className="text-gray-400 hover:text-gray-600">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
+                  <img src="/edit.svg" alt="star" className="w-4 h-4" />
                 </button>
                 <button className="text-gray-400 hover:text-red-600">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
+                  <img src="/delete.svg" alt="star" className="w-4 h-4" />
                 </button>
-                <button className="text-gray-400 hover:text-blue-600">
+                <button className="text-blue-600">
                   <Plus className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
             <div className="space-y-2 mb-4">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Phone className="w-4 h-4" />
                 {tech.phone}
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
                 <MapPin className="w-4 h-4" />
                 {tech.location}
               </div>
-            </div>
-
-            <div className="mb-4 pb-4 border-b border-gray-200">
-              <div className="text-xs text-gray-500 mb-1">Availability</div>
-              <div className="text-sm font-medium text-gray-800">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <img src="/clock.svg" alt="email" className="w-4 h-4" />
                 {tech.availability}
               </div>
             </div>
 
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 border-t border-gray-300 pt-4">
               <div className="text-center">
-                <div className="text-xs text-gray-500">Jobs Today</div>
-                <div className="text-lg font-bold text-gray-800">
+                <div className="text-sm text-gray-500">Jobs Today</div>
+                <div className="text-md font-bold text-gray-800">
                   {tech.jobsToday}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-xs text-gray-500">Completed</div>
-                <div className="text-lg font-bold text-green-500">
+                <div className="text-sm text-gray-500">Completed</div>
+                <div className="text-md font-bold text-green-500">
                   {tech.completed}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-xs text-gray-500">Pending</div>
-                <div className="text-lg font-bold text-yellow-500">
+                <div className="text-sm text-gray-500">Pending</div>
+                <div className="text-md font-bold text-yellow-500">
                   {tech.pending}
                 </div>
               </div>
             </div>
 
-            <button className="w-full py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-              View Schedule
-            </button>
+            <Link href="/calendar">
+              <button className="w-full py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                View Schedule
+              </button>
+            </Link>
           </div>
         ))}
       </div>
@@ -431,5 +409,6 @@ export default function TechniciansPage() {
         </div>
       )}
     </div>
+    </Wrapper>
   );
 }

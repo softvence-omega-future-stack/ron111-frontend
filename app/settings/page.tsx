@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Key, Bell, Building, Sparkles, MapPin } from "lucide-react";
+import Wrapper from "@/components/common/Wrapper";
 
 export default function SettingsPage() {
   const [smsNotifications, setSmsNotifications] = useState(true);
@@ -11,10 +12,11 @@ export default function SettingsPage() {
   const [realTimeTracking, setRealTimeTracking] = useState(true);
 
   return (
-    <div className="">
+    <Wrapper>
+      <div className="">
       {/* Header */}
       <div className="mb-6 flex flex-col items-center lg:items-start justify-between">
-        <h1 className="text-xl font-semibold text-gray-800 flex items-center mb-1 gap-2">
+        <h1 className="text-xl font-semibold text-gray-900 flex items-center mb-1 gap-2">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +66,7 @@ export default function SettingsPage() {
               <input
                 type="text"
                 placeholder="Required for address validation and distance features"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border bg-gray-50 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -75,7 +77,7 @@ export default function SettingsPage() {
               <input
                 type="text"
                 placeholder="Enter Twilio key for SMS notifications"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -86,7 +88,7 @@ export default function SettingsPage() {
               <input
                 type="text"
                 placeholder="+1 (XXX) XXX-XXXX"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border bg-gray-50 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -109,7 +111,7 @@ export default function SettingsPage() {
               <input
                 type="text"
                 placeholder="Distance to search for nearby jobs when creating new appointments"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300  bg-gray-50rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -164,7 +166,7 @@ export default function SettingsPage() {
                       type="checkbox"
                       checked={smsNotifications}
                       onChange={(e) => setSmsNotifications(e.target.checked)}
-                      className="sr-only"
+                      className="sr-only bg-gray-50"
                     />
                     <div
                       className={`w-11 h-6 rounded-full transition-colors ${
@@ -198,7 +200,7 @@ export default function SettingsPage() {
                       type="checkbox"
                       checked={emailNotifications}
                       onChange={(e) => setEmailNotifications(e.target.checked)}
-                      className="sr-only"
+                      className="sr-only bg-gray-50"
                     />
                     <div
                       className={`w-11 h-6 rounded-full transition-colors ${
@@ -234,7 +236,8 @@ export default function SettingsPage() {
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Your Company LLC"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -245,7 +248,7 @@ export default function SettingsPage() {
               <input
                 type="text"
                 placeholder="123 Main St, Suite 456, ZIP"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border bg-gray-50 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -370,5 +373,6 @@ export default function SettingsPage() {
         </div>
       </div>
     </div>
+    </Wrapper>
   );
 }
