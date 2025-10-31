@@ -40,7 +40,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Quick Stats */}
-      <div className="p-4 border-t bg-white">
+      <div className="p-4 border-t border-gray-200 bg-white">
         <div className="bg-gray-50 rounded-lg p-4">
           <h3 className="text-xs font-semibold text-gray-600 mb-3">Quick Stats</h3>
           <div className="space-y-2">
