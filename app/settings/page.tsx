@@ -108,7 +108,7 @@ export default function SettingsPage() {
               </label>
               <input
                 type="text"
-                placeholder="20"
+                placeholder="Distance to search for nearby jobs when creating new appointments"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -337,8 +337,8 @@ export default function SettingsPage() {
                   <div className="relative">
                     <input
                       type="checkbox"
-                      checked={autoTerminate}
-                      onChange={(e) => setAutoTerminate(e.target.checked)}
+                      checked={realTimeTracking}
+                      onChange={(e) => setRealTimeTracking(e.target.checked)}
                       className="sr-only"
                     />
                     <div
