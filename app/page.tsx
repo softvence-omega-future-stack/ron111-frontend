@@ -428,10 +428,10 @@ export default function DashboardPage() {
               <button
                 key={tab.label}
                 onClick={() => setSelectedTab(tab.label)}
-                className={`py-2 px-3 my-2 text-[.65rem] md:text-sm font-medium transition-colors text-nowrap ${
+                className={`py-1 px-3 my-1 text-[.65rem] md:text-sm font-medium transition-colors text-nowrap ${
                   selectedTab === tab.label
                     ? " rounded-full bg-white text-black"
-                    : "border-transparent text-gray-900 hover:text-gray-500"
+                    : "border-transparent text-gray-900 hover:text-gray-600"
                 }`}
               >
                 {tab.label} ({tab.count.toString().padStart(2, "0")})
