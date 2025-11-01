@@ -481,7 +481,7 @@ const CalendarOverview = () => {
                               </div>
                             </div>
                             <button
-                              className={`w-full mt-2 rounded text-[.45rem] lg:text-[.7rem] p-2 font-medium text-white ${
+                              className={`w-full mt-2 rounded-full text-[.45rem] lg:text-[.7rem] p-2 font-medium text-white ${
                                 event.status === "completed"
                                   ? "bg-blue-500 hover:bg-blue-600"
                                   : "bg-orange-500 hover:bg-orange-600"
