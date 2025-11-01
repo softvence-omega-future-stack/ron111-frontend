@@ -451,7 +451,7 @@ const CalendarOverview = () => {
                               event.status === "completed"
                                 ? "bg-blue-50 border-blue-300"
                                 : "bg-orange-50 border-orange-300"
-                            } border-l-6 border rounded-lg shadow-md p-2 sm:p-3 h-full flex flex-col justify-between`}
+                            } border-l-6 border rounded-2xl shadow-md p-2 sm:p-3 h-full flex flex-col justify-between`}
                           >
                             <div className="flex flex-col gap-1">
                               <div className="font-medium text-[10px] sm:text-sm text-gray-900 truncate">
