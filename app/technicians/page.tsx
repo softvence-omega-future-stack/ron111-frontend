@@ -270,7 +270,7 @@ export default function TechniciansPage() {
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-500">Completed</div>
-                  <div className="text-md font-bold text-green-500">
+                  <div className="text-md font-bold text-green-400">
                     {tech.completed}
                   </div>
                 </div>
