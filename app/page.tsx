@@ -1,8 +1,50 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Search, Calendar, Plus, Eye, X, MapPin } from "lucide-react";
-import Wrapper from "@/components/common/Wrapper";
+import {
+  Search,
+  Calendar,
+  Plus,
+  Eye,
+  X,
+  MapPin,
+} from "lucide-react";
+
+const stateOptions = [
+  "All States",
+  "California",
+  "Texas",
+  "New York",
+  "Illinois",
+  "Florida",
+  "Washington",
+  "Colorado",
+  "Nevada",
+  "Arizona",
+];
+
+const stateMapUrls: Record<string, string> = {
+  "All States":
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12656842.462405518!2d-106.34433134999998!3d37.27560149999999!2m3!1f0!2f0!3f0",
+  California:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423287.94406452945!2d-118.69192012531422!3d34.020161305233985!2m3!1f0!2f0!3f0",
+  Texas:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d54161767.01718355!2d-106.65413228913782!3d31.968598798453874!2m3!1f0!2f0!3f0",
+  "New York":
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d97109.72383569059!2d-74.00601520287745!3d40.71272810795244!2m3!1f0!2f0!3f0",
+  Illinois:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2994350.4293274447!2d-90.19940409164027!3d40.63312453566913!2m3!1f0!2f0!3f0",
+  Florida:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571327.084469884!2d-83.50702077318103!3d27.994402415222095!2m3!1f0!2f0!3f0",
+  Washington:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2158586.2389110545!2d-122.84733970423003!3d47.751074055682105!2m3!1f0!2f0!3f0",
+  Colorado:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2521792.579430237!2d-106.44535696454844!3d39.55005073891862!2m3!1f0!2f0!3f0",
+  Nevada:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1951938.2325339237!2d-117.05537455438173!3d38.80260970286713!2m3!1f0!2f0!3f0",
+  Arizona:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2989757.7597921324!2d-113.43147835792653!3d34.04892810074473!2m3!1f0!2f0!3f0",
+};
 
 const jobs = [
   {
@@ -61,6 +103,13 @@ export default function DashboardPage() {
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedState, setSelectedState] = useState("All States");
+  const [showStateDropdown, setShowStateDropdown] = useState(false);
+  const stateDropdownRef = useRef<HTMLDivElement>(null); // <-- typed
+  const mapUrl = useMemo(
+    () => stateMapUrls[selectedState] || stateMapUrls["All States"],
+    [selectedState]
+  );
   const statusDropdownRef = useRef<HTMLDivElement>(null); // <-- typed
   const [selectedDate, setSelectedDate] = useState("2025-10-18");
 
@@ -98,9 +147,24 @@ export default function DashboardPage() {
       });
       filtered = filtered.filter((j) => j.date === formattedDate);
     }
-
     return filtered;
   }, [selectedTab, searchQuery, statusFilter, selectedDate]);
+
+  // mapUrl is derived via useMemo from selectedState; no additional effect needed
+
+  // Handle outside clicks
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        stateDropdownRef.current &&
+        !stateDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowStateDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const completedCount = jobs.filter((j) => j.status === "Completed").length;
   const pendingCount = jobs.filter((j) => j.status === "Pending").length;
@@ -165,12 +229,11 @@ export default function DashboardPage() {
     document.body.style.overflow = "unset";
   };
   return (
-    <Wrapper>
       <div className="">
         {/* Header */}
         <div className="flex flex-col md:flex-row items-center justify-center lg:items-start md:justify-between mb-6 gap-4">
-          <div className="flex flex-col items-center lg:items-start">
-            <h1 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2 text-center">
+          <div className="flex flex-col items-center md:items-start">
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 flex items-center gap-2">
               <span className="text-blue-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -238,13 +301,14 @@ export default function DashboardPage() {
                 className="w-full pl-10 pr-4 py-2.5 border border-gray-300 bg-gray-50 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
               />
             </div>
-            <div className="relative" ref={statusDropdownRef}>
+            {/* State Dropdown */}
+            <div className="relative" ref={stateDropdownRef}>
               <button
-                onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                className="flex items-center justify-between gap-3 px-4 py-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer min-w-[150px]"
+                onClick={() => setShowStateDropdown(!showStateDropdown)}
+                className="flex w-full items-center justify-between gap-3 px-4 py-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer min-w-[150px]"
               >
                 <span className="font-medium text-gray-700">
-                  {statusFilter}
+                  {selectedState}
                 </span>
                 <svg
                   className="w-4 h-4 text-gray-500"
@@ -261,41 +325,22 @@ export default function DashboardPage() {
                 </svg>
               </button>
 
-              {showStatusDropdown && (
-                <div className="absolute top-full mt-2 left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[150px]">
-                  {statusOptions.map((option) => (
+              {showStateDropdown && (
+                <div className="absolute top-full mt-2 left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[150px] max-h-60 overflow-y-auto">
+                  {stateOptions.map((state) => (
                     <button
-                      key={option.value}
-                      onClick={() => handleStatusSelect(option.value)}
-                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors flex items-center gap-2 ${
-                        statusFilter === option.value
+                      key={state}
+                      onClick={() => {
+                        setSelectedState(state);
+                        setShowStateDropdown(false);
+                      }}
+                      className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
+                        selectedState === state
                           ? "bg-blue-50 text-blue-700"
                           : "text-gray-700"
                       }`}
                     >
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          option.color === "blue"
-                            ? "bg-blue-500"
-                            : option.color === "yellow"
-                            ? "bg-yellow-500"
-                            : "bg-gray-400"
-                        }`}
-                      ></div>
-                      <span className="font-medium">{option.label}</span>
-                      {statusFilter === option.value && (
-                        <svg
-                          className="w-4 h-4 ml-auto text-blue-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
+                      {state}
                     </button>
                   ))}
                 </div>
@@ -306,418 +351,418 @@ export default function DashboardPage() {
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent outline-none cursor-pointer text-gray-700"
+                className="bg-transparent w-full outline-none cursor-pointer text-gray-700"
               />
             </div>
           </div>
         </div>
 
-        {/* Map */}
-        <div className="bg-white rounded-lg overflow-hidden mb-6 shadow-sm h-64 sm:h-110 md:h-146">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12656842.462405518!2d-106.34433134999998!3d37.27560149999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698765432100!5m2!1sen!2sus"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="w-full h-full"
-          ></iframe>
-        </div>
+      {/* Map */}
+      <div className="bg-white rounded-lg overflow-hidden mb-6 shadow-sm h-64 sm:h-110 md:h-146">
+        {" "}
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12656842.462405518!2d-106.34433134999998!3d37.27560149999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698765432100!5m2!1sen!2sus"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="w-full h-full"
+        ></iframe>{" "}
+      </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {[
-            {
-              label: "Total Assigned",
-              value: jobs.length,
-              color: "blue",
-              emoji: <img src="/total.svg" alt="" />,
-            },
-            {
-              label: "Pending",
-              value: pendingCount,
-              color: "purple",
-              emoji: <img src="/pending.svg" alt="" />,
-            },
-            {
-              label: "Completed",
-              value: completedCount,
-              color: "blue",
-              emoji: <img src="/complete.svg" alt="" />,
-            },
-          ].map((card) => {
-            return (
-              <div
-                key={card.label}
-                className="bg-white rounded-lg border border-gray-300 p-4 transition hover:shadow-sm"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs text-gray-600">{card.label}</p>
-                  <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center`}
-                  >
-                    <span className={`text-lg h-10 w-10`}>{card.emoji}</span>
-                  </div>
-                </div>
-                <p className="text-2xl font-bold text-gray-800">
-                  {card.value.toString().padStart(2, "0")}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Jobs Table */}
-        <div className="w-full h-auto bg-white rounded-lg shadow-sm border border-gray-300">
-          {/* Tabs */}
-          <div className="border rounded-3xl border-gray-300 bg-gray-100 w-fit my-4 mx-2">
-            <div className="flex px-4">
-              {[
-                { label: "All", count: jobs.length },
-                { label: "Completed", count: completedCount },
-                { label: "Pending", count: pendingCount },
-              ].map((tab) => (
-                <button
-                  key={tab.label}
-                  onClick={() => setSelectedTab(tab.label)}
-                  className={`py-2 px-3 my-2 text-[.65rem] md:text-sm font-medium transition-colors text-nowrap ${
-                    selectedTab === tab.label
-                      ? " rounded-full bg-white"
-                      : "border-transparent text-gray-900 hover:text-gray-800"
-                  }`}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {[
+          {
+            label: "Total Assigned",
+            value: jobs.length,
+            color: "blue",
+            emoji: <img src="/total.svg" alt="" />,
+          },
+          {
+            label: "Pending",
+            value: pendingCount,
+            color: "purple",
+            emoji: <img src="/pending.svg" alt="" />,
+          },
+          {
+            label: "Completed",
+            value: completedCount,
+            color: "blue",
+            emoji: <img src="/complete.svg" alt="" />,
+          },
+        ].map((card) => {
+          return (
+            <div
+              key={card.label}
+              className="bg-white rounded-lg border border-gray-300 p-4 transition hover:shadow-sm"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs text-gray-600">{card.label}</p>
+                <div
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center`}
                 >
-                  {tab.label} ({tab.count.toString().padStart(2, "0")})
-                </button>
-              ))}
+                  <span className={`text-lg h-10 w-10`}>{card.emoji}</span>
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-gray-800">
+                {card.value.toString().padStart(2, "0")}
+              </p>
             </div>
-          </div>
+          );
+        })}
+      </div>
 
-          {/* Table */}
-          <div className="w-full overflow-x-auto overflow-y-visible min-h-fit">
-            <table className="w-full border-collapse">
-              <thead className="border-b border-gray-200">
-                <tr>
-                  <th className="hidden md:table-cell text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
-                    Location
-                  </th>
-                  <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
-                    Technician
-                  </th>
-                  <th className="hidden md:table-cell text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
-                    Date
-                  </th>
-                  <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
-                    Time Slot
-                  </th>
-                  <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
-                    Status
-                  </th>
-                  <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredJobs.length > 0 ? (
-                  filteredJobs.map((job) => (
-                    <tr
-                      key={job.id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="hidden md:table-cell px-3 py-2 text-[11px] md:text-sm text-gray-800">
-                        {job.location}
-                      </td>
-                      <td className="px-3 py-2 text-[11px] md:text-sm text-gray-800 text-nowrap">
-                        {job.technician}
-                      </td>
-                      <td className="hidden md:table-cell px-3 py-2 text-[11px] md:text-sm text-gray-800">
-                        {job.date}
-                      </td>
-                      <td className="px-3 py-2 text-[11px] md:text-sm text-gray-800 text-nowrap">
-                        {job.time}
-                      </td>
-                      <td className="px-3 py-2">
-                        <span
-                          className={`inline-flex items-center px-2 py-1 rounded-lg text-[10px] md:text-sm font-medium ${
-                            job.status === "Completed"
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-200 text-gray-700"
-                          }`}
-                        >
-                          {job.status}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2">
-                        <button className="flex items-center gap-1 text-[11px] md:text-sm text-gray-600 hover:text-gray-800 transition-colors">
-                          <Eye className="w-3 h-3" /> View
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-3 py-4 text-center text-[11px] md:text-sm text-gray-500"
-                    >
-                      No jobs found matching your criteria
+      {/* Jobs Table */}
+      <div className="w-full h-auto bg-white rounded-lg shadow-sm border border-gray-300">
+        {/* Tabs */}
+        <div className="border rounded-3xl border-gray-300 bg-gray-100 w-fit my-4 mx-2">
+          <div className="flex px-4">
+            {[
+              { label: "All", count: jobs.length },
+              { label: "Completed", count: completedCount },
+              { label: "Pending", count: pendingCount },
+            ].map((tab) => (
+              <button
+                key={tab.label}
+                onClick={() => setSelectedTab(tab.label)}
+                className={`py-2 px-3 my-2 text-[.65rem] md:text-sm font-medium transition-colors text-nowrap ${
+                  selectedTab === tab.label
+                    ? " rounded-full bg-white text-black"
+                    : "border-transparent text-gray-900 hover:text-gray-500"
+                }`}
+              >
+                {tab.label} ({tab.count.toString().padStart(2, "0")})
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="w-full overflow-x-auto overflow-y-visible min-h-fit">
+          <table className="w-full border-collapse">
+            <thead className="border-b border-gray-200">
+              <tr>
+                <th className="hidden md:table-cell text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
+                  Location
+                </th>
+                <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
+                  Technician
+                </th>
+                <th className="hidden md:table-cell text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
+                  Date
+                </th>
+                <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
+                  Time Slot
+                </th>
+                <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
+                  Status
+                </th>
+                <th className="text-left px-3 py-2 text-[10px] md:text-sm font-semibold text-gray-600">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredJobs.length > 0 ? (
+                filteredJobs.map((job) => (
+                  <tr
+                    key={job.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="hidden md:table-cell px-3 py-2 text-[11px] md:text-sm text-gray-800">
+                      {job.location}
+                    </td>
+                    <td className="px-3 py-2 text-[11px] md:text-sm text-gray-800 text-nowrap">
+                      {job.technician}
+                    </td>
+                    <td className="hidden md:table-cell px-3 py-2 text-[11px] md:text-sm text-gray-800">
+                      {job.date}
+                    </td>
+                    <td className="px-3 py-2 text-[11px] md:text-sm text-gray-800 text-nowrap">
+                      {job.time}
+                    </td>
+                    <td className="px-3 py-2">
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-lg text-[10px] md:text-sm font-medium ${
+                          job.status === "Completed"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2">
+                      <button className="flex items-center gap-1 text-[11px] md:text-sm text-gray-600 hover:text-gray-800 transition-colors">
+                        <Eye className="w-3 h-3" /> View
+                      </button>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-3 py-4 text-center text-[11px] md:text-sm text-gray-500"
+                  >
+                    No jobs found matching your criteria
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        {/* Modal */}
-        {showModal && (
-          <div className="fixed inset-0 bg-white bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-hidden">
-            <div
-              className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl scrollbar-hide"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              <style>{`
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-hidden">
+          <div
+            className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl scrollbar-hide"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            <style>{`
               .scrollbar-hide::-webkit-scrollbar {
                 display: none;
               }
             `}</style>
-              {/* Modal Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white z-10">
-                <h2 className="text-lg font-semibold text-gray-800">
-                  Create New Job
-                </h2>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white z-10">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Create New Job
+              </h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4 space-y-4">
+              {/* Info Banner */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2">
+                <Plus className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-blue-800">
+                    Add New Job
+                  </p>
+                  <p className="text-xs text-blue-600 mt-0.5">
+                    Enter client information and schedule appointment
+                  </p>
+                </div>
               </div>
 
-              {/* Modal Content */}
-              <div className="p-4 space-y-4">
-                {/* Info Banner */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2">
-                  <Plus className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+              {/* Customer Information */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                  Customer Information
+                </h3>
+
+                <div className="space-y-3">
                   <div>
-                    <p className="text-sm font-medium text-blue-800">
-                      Add New Job
-                    </p>
-                    <p className="text-xs text-blue-600 mt-0.5">
-                      Enter client information and schedule appointment
-                    </p>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Customer Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="customerName"
+                      value={formData.customerName}
+                      onChange={handleInputChange}
+                      placeholder="John Doe"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                   </div>
-                </div>
 
-                {/* Customer Information */}
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                    Customer Information
-                  </h3>
-
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Customer Name <span className="text-red-500">*</span>
+                        Phone <span className="text-red-500">*</span>
                       </label>
                       <input
-                        type="text"
-                        name="customerName"
-                        value={formData.customerName}
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="John Doe"
+                        placeholder="(555) 123-4567"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                          Phone <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          placeholder="(555) 123-4567"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="john@example.com"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Location */}
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                    <MapPin className="w-4 h-4" /> Location
-                  </h3>
-
-                  <div className="space-y-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Service Address <span className="text-red-500">*</span>
+                        Email
                       </label>
                       <input
-                        type="text"
-                        name="serviceAddress"
-                        value={formData.serviceAddress}
+                        type="email"
+                        name="email"
+                        value={formData.email}
                         onChange={handleInputChange}
-                        placeholder="123 Main Street, City, State"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">
-                        Address will be validated with Google Places
-                      </p>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Zip Code
-                      </label>
-                      <input
-                        type="text"
-                        name="zipCode"
-                        value={formData.zipCode}
-                        onChange={handleInputChange}
-                        placeholder="12345"
+                        placeholder="john@example.com"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
                 </div>
-
-                {/* Job Details */}
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                    Job Details
-                  </h3>
-
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Job Description <span className="text-red-500">*</span>
-                      </label>
-                      <textarea
-                        name="jobDescription"
-                        value={formData.jobDescription}
-                        onChange={handleInputChange}
-                        placeholder="Describe the service needed..."
-                        rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Schedule */}
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                    <Calendar className="w-4 h-4" /> Schedule
-                  </h3>
-
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Date <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Time Slot <span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        name="timeSlot"
-                        value={formData.timeSlot}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                      >
-                        <option value="">Select time slot</option>
-                        <option value="09:00 am - 11:00 am">
-                          09:00 am - 11:00 am
-                        </option>
-                        <option value="10:00 am - 12:00 pm">
-                          10:00 am - 12:00 pm
-                        </option>
-                        <option value="11:00 am - 01:00 pm">
-                          11:00 am - 01:00 pm
-                        </option>
-                        <option value="01:00 pm - 03:00 pm">
-                          01:00 pm - 03:00 pm
-                        </option>
-                        <option value="02:00 pm - 04:00 pm">
-                          02:00 pm - 04:00 pm
-                        </option>
-                        <option value="03:00 pm - 05:00 pm">
-                          03:00 pm - 05:00 pm
-                        </option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
-                        Assign Technician{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        name="technician"
-                        value={formData.technician}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                      >
-                        <option value="">Select technician</option>
-                        <option value="John Anderson">John Anderson</option>
-                        <option value="Lisa Thompson">Lisa Thompson</option>
-                        <option value="Robert Williams">Robert Williams</option>
-                        <option value="Jennifer Davis">Jennifer Davis</option>
-                        <option value="Michael Brown">Michael Brown</option>
-                        <option value="Amanda Garcia">Amanda Garcia</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2.5 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Job & Send SMS
-                </button>
-
-                <p className="text-xs text-gray-500 text-center">
-                  SMS will be sent to assigned technician
-                </p>
               </div>
+
+              {/* Location */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <MapPin className="w-4 h-4" /> Location
+                </h3>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Service Address <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="serviceAddress"
+                      value={formData.serviceAddress}
+                      onChange={handleInputChange}
+                      placeholder="123 Main Street, City, State"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Address will be validated with Google Places
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Zip Code
+                    </label>
+                    <input
+                      type="text"
+                      name="zipCode"
+                      value={formData.zipCode}
+                      onChange={handleInputChange}
+                      placeholder="12345"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Job Details */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                  Job Details
+                </h3>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Job Description <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      name="jobDescription"
+                      value={formData.jobDescription}
+                      onChange={handleInputChange}
+                      placeholder="Describe the service needed..."
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Schedule */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Calendar className="w-4 h-4" /> Schedule
+                </h3>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Date <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Time Slot <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="timeSlot"
+                      value={formData.timeSlot}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    >
+                      <option value="">Select time slot</option>
+                      <option value="09:00 am - 11:00 am">
+                        09:00 am - 11:00 am
+                      </option>
+                      <option value="10:00 am - 12:00 pm">
+                        10:00 am - 12:00 pm
+                      </option>
+                      <option value="11:00 am - 01:00 pm">
+                        11:00 am - 01:00 pm
+                      </option>
+                      <option value="01:00 pm - 03:00 pm">
+                        01:00 pm - 03:00 pm
+                      </option>
+                      <option value="02:00 pm - 04:00 pm">
+                        02:00 pm - 04:00 pm
+                      </option>
+                      <option value="03:00 pm - 05:00 pm">
+                        03:00 pm - 05:00 pm
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Assign Technician <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="technician"
+                      value={formData.technician}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    >
+                      <option value="">Select technician</option>
+                      <option value="John Anderson">John Anderson</option>
+                      <option value="Lisa Thompson">Lisa Thompson</option>
+                      <option value="Robert Williams">Robert Williams</option>
+                      <option value="Jennifer Davis">Jennifer Davis</option>
+                      <option value="Michael Brown">Michael Brown</option>
+                      <option value="Amanda Garcia">Amanda Garcia</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                onClick={handleSubmit}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2.5 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Job & Send SMS
+              </button>
+
+              <p className="text-xs text-gray-500 text-center">
+                SMS will be sent to assigned technician
+              </p>
             </div>
           </div>
-        )}
-      </div>
-    </Wrapper>
+        </div>
+      )}
+    </div>
   );
 }
+

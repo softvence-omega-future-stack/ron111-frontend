@@ -8,7 +8,6 @@ import {
   ChevronDown,
   MapPinIcon,
 } from "lucide-react";
-import Wrapper from "@/components/common/Wrapper";
 
 const CalendarOverview = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -114,7 +113,7 @@ const CalendarOverview = () => {
         assign: "Abul Kalam",
         time: "2:00pm",
         location: "Board Room",
-        status: "pending",
+        status: "completed",
         date: new Date(
           weekDates[2].getFullYear(),
           weekDates[2].getMonth(),
@@ -261,7 +260,6 @@ const CalendarOverview = () => {
   // ... keep all imports, state, and functions exactly as before ...
 
   return (
-    <Wrapper>
       <div className="w-full min-h-fit bg-gray-50">
         {/* Header */}
         <div className="flex flex-col items-center justify-center lg:items-start mb-6 gap-4">
@@ -314,74 +312,83 @@ const CalendarOverview = () => {
         </div>
 
         {/* Schedule Section */}
-        <div className="bg-white rounded-lg p-4 mb-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          {/* Left Section */}
-          <div className="flex flex-wrap items-center gap-3 flex-1 min-w-0">
-            <div className="relative shrink-0" ref={datePickerRef}>
-              <button
-                onClick={() => setShowDatePicker(!showDatePicker)}
-                className="flex items-center gap-2 border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-50 transition-colors"
-              >
-                <Calendar size={16} className="text-gray-600" />
-                <span className="text-sm font-medium truncate">
-                  Schedule Calendar
-                </span>
-                <ChevronDown size={16} className="text-gray-600" />
-              </button>
-              {showDatePicker && (
-                <div className="absolute top-full mt-2 left-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50 w-64">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select Date
-                  </label>
-                  <input
-                    type="date"
-                    value={formatDateForInput(currentDate)}
-                    onChange={(e) => goToDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  />
-                  <div className="mt-3 text-xs text-gray-500">
-                    Week starts: {monthNames[startOfWeek.getMonth()]}{" "}
-                    {startOfWeek.getDate()}, {startOfWeek.getFullYear()}
+        <div className="bg-white rounded-lg p-4 mb-6 shadow-sm flex flex-col gap-4">
+          {/* Top Row */}
+          <div className="flex flex-wrap items-center justify-between w-full gap-3">
+            {/* Left Side */}
+            <div className="flex flex-nowrap items-center gap-2">
+              {/* Schedule Calendar Button */}
+              <div className="relative" ref={datePickerRef}>
+                <button
+                  onClick={() => setShowDatePicker(!showDatePicker)}
+                  className="flex items-center gap-2 border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-50 transition-colors"
+                >
+                  <Calendar size={16} className="text-gray-600" />
+                  <span className="text-sm font-medium truncate">
+                    Schedule Calendar
+                  </span>
+                  <ChevronDown size={16} className="text-gray-600" />
+                </button>
+
+                {/* Date Picker Dropdown */}
+                {showDatePicker && (
+                  <div className="absolute top-full mt-2 left-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50 w-64">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Select Date
+                    </label>
+                    <input
+                      type="date"
+                      value={formatDateForInput(currentDate)}
+                      onChange={(e) => goToDate(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                    <div className="mt-3 text-xs text-gray-500">
+                      Week starts: {monthNames[startOfWeek.getMonth()]}{" "}
+                      {startOfWeek.getDate()}, {startOfWeek.getFullYear()}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+
+              {/* Navigation Buttons */}
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={goToPreviousWeek}
+                  className=" hover:bg-gray-100 rounded transition-colors"
+                >
+                  <ChevronLeft size={20} className="text-gray-600" />
+                </button>
+                <button
+                  onClick={goToToday}
+                  className="text-xs sm:text-sm font-medium hover:bg-gray-100 rounded transition-colors"
+                >
+                  Today
+                </button>
+                <button
+                  onClick={goToNextWeek}
+                  className="hover:bg-gray-100 rounded transition-colors"
+                >
+                  <ChevronRight size={20} className="text-gray-600" />
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-1 shrink-0">
-              <button
-                onClick={goToPreviousWeek}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                <ChevronLeft size={20} className="text-gray-600" />
+            {/* Right Side */}
+            <div className="flex flex-wrap items-center gap-2 mt-3 sm:mt-0 ">
+              <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <option>All Technicians</option>
+              </select>
+              <button className="px-4 py-2 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors whitespace-nowrap">
+                Week
               </button>
-              <button
-                onClick={goToToday}
-                className="px-1 lg:px-4 py-2 text-sm font-medium hover:bg-gray-100 rounded transition-colors"
-              >
-                Today
-              </button>
-              <button
-                onClick={goToNextWeek}
-                className="p-2 hover:bg-gray-100 rounded transition-colors"
-              >
-                <ChevronRight size={20} className="text-gray-600" />
-              </button>
-            </div>
-
-            <div className="text-md font-medium text-gray-700 shrink-0 truncate">
-              {formatWeekRange()}
             </div>
           </div>
 
-          {/* Right Buttons Section */}
-          <div className="flex flex-nowrap items-center gap-2 shrink-0">
-            <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-              <option>All Technicians</option>
-            </select>
-            <button className="px-4 py-2 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors whitespace-nowrap">
-              Week
-            </button>
-            {/* Day button commented out as per your code */}
+          {/* Week Range Section (Below) */}
+          <div className="flex items-center justify-start w-full">
+            <p className="text-sm text-gray-600 font-medium">
+              {formatWeekRange()}
+            </p>
           </div>
         </div>
 
@@ -451,7 +458,7 @@ const CalendarOverview = () => {
                                 {event.name}
                               </div>
                               <div
-                                className={`hidden xl:inline-flex items-center gap-1 text-[8px] sm:text-xs text-${
+                                className={`hidden lg:inline-flex items-center gap-1 text-[8px] sm:text-xs text-${
                                   event.status === "completed"
                                     ? "blue-700"
                                     : "orange-700"
@@ -463,7 +470,7 @@ const CalendarOverview = () => {
                                 </span>
                               </div>
 
-                              <div className="hidden xl:block text-[8px] sm:text-xs text-gray-600 truncate">
+                              <div className="hidden lg:block text-[8px] sm:text-xs text-gray-600 truncate">
                                 <div className="mb-1">Assigned By</div>
                                 <img
                                   src="/img.png"
@@ -474,15 +481,13 @@ const CalendarOverview = () => {
                               </div>
                             </div>
                             <button
-                              className={`w-full mt-2 py-1 sm:py-2 rounded text-[8px] sm:text-xs font-medium text-white ${
+                              className={`w-full mt-2 rounded text-[.45rem] lg:text-[.7rem] p-2 font-medium text-white ${
                                 event.status === "completed"
                                   ? "bg-blue-500 hover:bg-blue-600"
                                   : "bg-orange-500 hover:bg-orange-600"
                               } transition-colors`}
                             >
-                              <span className="whitespace-nowrap">
-                                {event.time}
-                              </span>
+                              <span className="">{event.time}</span>
                             </button>
                           </div>
                         )}
@@ -517,7 +522,6 @@ const CalendarOverview = () => {
           </div>
         </div>
       </div>
-    </Wrapper>
   );
 };
 

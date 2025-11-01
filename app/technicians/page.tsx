@@ -9,6 +9,7 @@ type Technician = {
   id: number;
   name: string;
   role: string;
+  isActive?: boolean;
   rating: number;
   phone: string;
   email: string;
@@ -24,6 +25,7 @@ const technicians: Technician[] = [
     id: 1,
     name: "David Mathias",
     role: "Senior",
+    isActive: true,
     rating: 4.8,
     phone: "(415) 123-4567",
     email: "david@company.com",
@@ -37,6 +39,7 @@ const technicians: Technician[] = [
     id: 2,
     name: "Sarah Johnson",
     role: "Junior",
+    isActive: true,
     rating: 4.7,
     phone: "(415) 234-5678",
     email: "sarah@company.com",
@@ -50,6 +53,7 @@ const technicians: Technician[] = [
     id: 3,
     name: "Mike Chen",
     role: "Senior",
+    isActive: false,
     rating: 4.9,
     phone: "(415) 345-6789",
     email: "mike@company.com",
@@ -63,6 +67,7 @@ const technicians: Technician[] = [
     id: 4,
     name: "David Mathias",
     role: "Senior",
+    isActive: true,
     rating: 4.8,
     phone: "(415) 456-7890",
     email: "david2@company.com",
@@ -76,6 +81,7 @@ const technicians: Technician[] = [
     id: 5,
     name: "Sarah Johnson",
     role: "Junior",
+    isActive: true,
     rating: 4.7,
     phone: "(415) 567-8901",
     email: "sarah2@company.com",
@@ -89,6 +95,7 @@ const technicians: Technician[] = [
     id: 6,
     name: "Mike Chen",
     role: "Senior",
+    isActive: false,
     rating: 4.9,
     phone: "(415) 678-9012",
     email: "mike2@company.com",
@@ -153,7 +160,6 @@ export default function TechniciansPage() {
   };
 
   return (
-    <Wrapper>
       <div>
         {/* Header */}
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between mb-6 gap-4">
@@ -199,13 +205,14 @@ export default function TechniciansPage() {
         </div>
 
         {/* Technician Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10">
           {technicians.map((tech) => (
             <div
               key={tech.id}
-              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between min-h-[28rem]"
             >
-              <div className="flex items-start justify-between mb-4">
+              {/* Top section */}
+              <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
                     {tech.name
@@ -217,19 +224,19 @@ export default function TechniciansPage() {
                     <h3 className="font-semibold text-gray-800">{tech.name}</h3>
                     <span
                       className={`inline-block px-2 py-0.5 rounded-lg text-xs font-medium text-white ${
-                        tech.role === "Senior" ? "bg-blue-500" : "bg-yellow-500"
+                        tech.isActive ? "bg-blue-500" : "bg-orange-500"
                       }`}
                     >
-                      {tech.role}
+                      {tech.isActive ? "Active" : "Inactive"}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button className="text-gray-400 hover:text-gray-600">
-                    <img src="/edit.svg" alt="star" className="w-4 h-4" />
+                    <img src="/edit.svg" alt="edit" className="w-4 h-4" />
                   </button>
                   <button className="text-gray-400 hover:text-red-600">
-                    <img src="/delete.svg" alt="star" className="w-4 h-4" />
+                    <img src="/delete.svg" alt="delete" className="w-4 h-4" />
                   </button>
                   <button className="text-blue-600">
                     <Plus className="w-5 h-5" />
@@ -237,7 +244,8 @@ export default function TechniciansPage() {
                 </div>
               </div>
 
-              <div className="space-y-2 mb-4">
+              {/* Contact & availability */}
+              <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <Phone className="w-4 h-4" />
                   {tech.phone}
@@ -247,12 +255,13 @@ export default function TechniciansPage() {
                   {tech.location}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <img src="/clock.svg" alt="email" className="w-4 h-4" />
+                  <img src="/clock.svg" alt="clock" className="w-4 h-4" />
                   {tech.availability}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-4 border-t border-gray-300 pt-4">
+              {/* Stats */}
+              <div className="flex items-center justify-between border-t border-gray-300 pt-4 mb-6">
                 <div className="text-center">
                   <div className="text-sm text-gray-500">Jobs Today</div>
                   <div className="text-md font-bold text-gray-800">
@@ -273,8 +282,9 @@ export default function TechniciansPage() {
                 </div>
               </div>
 
-              <Link href="/calendar">
-                <button className="w-full py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+              {/* View schedule button */}
+              <Link href="/calendar" className="w-full">
+                <button className="w-full py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                   View Schedule
                 </button>
               </Link>
@@ -396,7 +406,7 @@ export default function TechniciansPage() {
 
                 <button
                   onClick={handleSubmit}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2.5 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-purple-800 transition-all"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2.5 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-800 transition-all"
                 >
                   Add Technician
                 </button>
@@ -405,6 +415,5 @@ export default function TechniciansPage() {
           </div>
         )}
       </div>
-    </Wrapper>
   );
 }

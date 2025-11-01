@@ -12,7 +12,6 @@ export default function SettingsPage() {
   const [realTimeTracking, setRealTimeTracking] = useState(true);
 
   return (
-    <Wrapper>
       <div className="">
         {/* Header */}
         <div className="mb-6 flex flex-col items-center lg:items-start justify-between">
@@ -66,7 +65,7 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   placeholder="Required for address validation and distance features"
-                  className="w-full px-4 py-2 border bg-gray-50 border-gray-300 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border bg-gray-100 border-gray-300 rounded-lg text-black text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -77,7 +76,7 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   placeholder="Enter Twilio key for SMS notifications"
-                  className="w-full px-4 py-2 bg-gray-50 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-gray-100 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -88,7 +87,7 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   placeholder="+1 (XXX) XXX-XXXX"
-                  className="w-full px-4 py-2 border bg-gray-50 text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border bg-gray-100 text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -111,7 +110,7 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   placeholder="Distance to search for nearby jobs when creating new appointments"
-                  className="w-full px-4 py-2 border border-gray-300 text-black bg-gray-50rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-gray-100 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -134,7 +133,7 @@ export default function SettingsPage() {
               </div>
 
               <button className="flex items-center justify-between gap-2 p-2 border border-gray-100 rounded-xl text-sm text-blue-600 hover:text-blue-700 font-medium">
-                <span>🕐</span>
+                <img src="/clock.svg" alt="edit" className="w-4 h-4" />
                 Customize Time Slots
               </button>
             </div>
@@ -166,11 +165,11 @@ export default function SettingsPage() {
                         type="checkbox"
                         checked={smsNotifications}
                         onChange={(e) => setSmsNotifications(e.target.checked)}
-                        className="sr-only bg-gray-50 text-black"
+                        className="sr-only bg-gray-100 text-black"
                       />
                       <div
                         className={`w-11 h-6 rounded-full transition-colors ${
-                          smsNotifications ? "bg-blue-600" : "bg-gray-300"
+                          smsNotifications ? "bg-black" : "bg-gray-300"
                         }`}
                       >
                         <div
@@ -202,11 +201,11 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           setEmailNotifications(e.target.checked)
                         }
-                        className="sr-only bg-gray-50 text-black"
+                        className="sr-only bg-gray-100 text-black"
                       />
                       <div
                         className={`w-11 h-6 rounded-full transition-colors ${
-                          emailNotifications ? "bg-blue-600" : "bg-gray-300"
+                          emailNotifications ? "bg-black" : "bg-gray-300"
                         }`}
                       >
                         <div
@@ -239,7 +238,7 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   placeholder="Your Company LLC"
-                  className="w-full px-4 py-2 bg-gray-50 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-gray-100 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -250,7 +249,7 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   placeholder="123 Main St, Suite 456, ZIP"
-                  className="w-full px-4 py-2 border bg-gray-50 text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border bg-gray-100 text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -286,7 +285,7 @@ export default function SettingsPage() {
                       />
                       <div
                         className={`w-11 h-6 rounded-full transition-colors ${
-                          autoTerminate ? "bg-blue-600" : "bg-gray-300"
+                          autoTerminate ? "bg-black" : "bg-gray-300"
                         }`}
                       >
                         <div
@@ -319,7 +318,7 @@ export default function SettingsPage() {
                       />
                       <div
                         className={`w-11 h-6 rounded-full transition-colors ${
-                          routeOptimize ? "bg-blue-600" : "bg-gray-300"
+                          routeOptimize ? "bg-black" : "bg-gray-300"
                         }`}
                       >
                         <div
@@ -352,7 +351,7 @@ export default function SettingsPage() {
                       />
                       <div
                         className={`w-11 h-6 rounded-full transition-colors ${
-                          realTimeTracking ? "bg-blue-600" : "bg-gray-300"
+                          realTimeTracking ? "bg-black" : "bg-gray-300"
                         }`}
                       >
                         <div
@@ -370,7 +369,7 @@ export default function SettingsPage() {
 
           {/* Save Button */}
           <div className="flex justify-center md:justify-end gap-3">
-            <button className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <button className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
               Reset to Default
             </button>
             <button className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700">
@@ -379,6 +378,5 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
-    </Wrapper>
   );
 }

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { Menu } from "lucide-react";
+import Wrapper from "../common/Wrapper";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -53,7 +54,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           sidebarOpen ? "blur-sm lg:blur-0" : ""
         } mt-[4.5rem] lg:mt-16 lg:ml-64 p-4 sm:p-6`}
       >
-        {children}
+        <Wrapper>{children}</Wrapper>
       </main>
 
       {/* Slide Animation */}
