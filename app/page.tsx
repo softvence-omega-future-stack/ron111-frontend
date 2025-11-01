@@ -546,7 +546,6 @@ export default function DashboardPage() {
             <div className="p-4 space-y-4">
               {/* Info Banner */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2">
-                <Plus className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-blue-800">
                     Add New Job
