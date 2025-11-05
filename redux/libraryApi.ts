@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BASE_URL = process.env.baseUrl || "http://147.93.29.211:3008/api/v1";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://147.93.29.211:3008/api/v1";
 
 export const libraryApi = createApi({
   reducerPath: "libraryApi",
