@@ -2,43 +2,90 @@
 
 import { MapPin, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  useLogoutUserMutation,
+  useGetUserProfileQuery,
+} from "@/redux/libraryApi";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Navbar() {
   const router = useRouter();
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("accessToken");
+  });
 
-  const handleLogout = () => {
-    router.push("/login");
+  const [logoutUser, { isLoading }] = useLogoutUserMutation();
+
+  // ✅ Only run profile query if token exists
+  const { data: userResponse, isLoading: profileLoading } = useGetUserProfileQuery(undefined, {
+    skip: !token,
+    refetchOnMountOrArgChange: true, // ensures fresh data on mount
+  });
+
+  const user = userResponse?.data || userResponse;
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser({}).unwrap();
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      setToken(null); // update state so query is skipped
+      router.replace("/login"); // safe redirect without reload
+    } catch (err) {
+      console.error("Logout error:", err);
+      alert("Logout failed!");
+    }
   };
+
+  if (profileLoading) return null;
 
   return (
     <header className="bg-white border-b border-gray-100 h-16 fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center justify-between h-full px-6">
-        {/* Left side - Logo and Title */}
+        {/* Left side */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
             <MapPin className="w-6 h-6 text-white" strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="font-semibold text-gray-800 text-base">Route Optima</h1>
+            <h1 className="font-semibold text-gray-800 text-base">
+              Route Optima
+            </h1>
             <p className="text-xs text-gray-500">Job Scheduling Platform</p>
           </div>
         </div>
 
-        {/* Right side - User Info */}
+        {/* Right side */}
         <div className="flex items-center gap-4">
           <div className="text-right hidden md:block">
-            <p className="text-sm font-medium text-gray-800">Admin User</p>
-            <p className="text-xs text-gray-500">Dispatcher</p>
+            <p className="text-sm font-medium text-gray-800">
+              {user?.name || "Loading..."}
+            </p>
+            <p className="text-xs text-gray-500">{user?.role || ""}</p>
           </div>
 
-          {/* User Avatar */}
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
-            AU
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm overflow-hidden">
+            {user?.photo ? (
+              <Image
+                src={user.photo}
+                alt={user.name || "User"}
+                width={36}
+                height={36}
+                className="w-full h-full object-cover"
+                unoptimized={true}
+              />
+            ) : user?.name ? (
+              user.name.slice(0, 2).toUpperCase()
+            ) : (
+              "NA"
+            )}
           </div>
-          
-          {/* Logout Button */}
+
           <button
             onClick={handleLogout}
+            disabled={isLoading}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             title="Logout"
           >

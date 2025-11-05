@@ -214,7 +214,7 @@ export default function JobListPage() {
         ].map((card) => (
           <div
             key={card.label}
-            className="bg-white rounded-lg p-6 shadow-sm transition hover:shadow-md border border-gray-200"
+            className="bg-white rounded-lg p-2.5 lg:p-6 shadow-sm transition hover:shadow-md border border-gray-200"
           >
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs sm:text-sm text-gray-600">{card.label}</p>
