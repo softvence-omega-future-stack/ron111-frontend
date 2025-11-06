@@ -214,7 +214,7 @@ export default function JobListPage() {
         ].map((card) => (
           <div
             key={card.label}
-            className="bg-white rounded-lg p-2.5 lg:p-6 shadow-sm transition hover:shadow-md border border-gray-200"
+            className="bg-white rounded-lg p-2.5 xl:p-5 shadow-sm transition hover:shadow-md border border-gray-200"
           >
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs sm:text-sm text-gray-600">{card.label}</p>
@@ -322,7 +322,7 @@ export default function JobListPage() {
                 </div>
               )}
             </div>
-            <select className="px-4 py-2 border bg-gray-50 border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <select className="px-4 py-2 border bg-gray-50 text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option>All Technicians</option>
             </select>
           </div>

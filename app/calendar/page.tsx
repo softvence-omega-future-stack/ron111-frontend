@@ -375,7 +375,7 @@ const CalendarOverview = () => {
 
             {/* Right Side */}
             <div className="flex flex-wrap items-center gap-2 mt-3 sm:mt-0 ">
-              <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+              <select className="px-4 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                 <option>All Technicians</option>
               </select>
               <button className="px-4 py-2 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors whitespace-nowrap">
