@@ -530,7 +530,7 @@ export default function DashboardPage() {
               }
             `}</style>
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white z-10">
+            <div className="flex items-center justify-between p-4 border-b text-black border-gray-200 sticky top-0 bg-white z-10">
               <h2 className="text-lg font-semibold text-gray-800">
                 Create New Job
               </h2>
@@ -558,7 +558,7 @@ export default function DashboardPage() {
 
               {/* Customer Information */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                <h3 className="text-sm font-semibold text-text-black mb-3">
                   Customer Information
                 </h3>
 
@@ -573,7 +573,7 @@ export default function DashboardPage() {
                       value={formData.customerName}
                       onChange={handleInputChange}
                       placeholder="John Doe"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
@@ -588,7 +588,7 @@ export default function DashboardPage() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="(555) 123-4567"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -601,7 +601,7 @@ export default function DashboardPage() {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="john@example.com"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
@@ -625,7 +625,7 @@ export default function DashboardPage() {
                       value={formData.serviceAddress}
                       onChange={handleInputChange}
                       placeholder="123 Main Street, City, State"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       Address will be validated with Google Places
@@ -642,7 +642,7 @@ export default function DashboardPage() {
                       value={formData.zipCode}
                       onChange={handleInputChange}
                       placeholder="12345"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -665,7 +665,7 @@ export default function DashboardPage() {
                       onChange={handleInputChange}
                       placeholder="Describe the service needed..."
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     />
                   </div>
                 </div>
@@ -687,7 +687,7 @@ export default function DashboardPage() {
                       name="date"
                       value={formData.date}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
@@ -699,7 +699,7 @@ export default function DashboardPage() {
                       name="timeSlot"
                       value={formData.timeSlot}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     >
                       <option value="">Select time slot</option>
                       <option value="09:00 am - 11:00 am">
@@ -731,7 +731,7 @@ export default function DashboardPage() {
                       name="technician"
                       value={formData.technician}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     >
                       <option value="">Select technician</option>
                       <option value="John Anderson">John Anderson</option>

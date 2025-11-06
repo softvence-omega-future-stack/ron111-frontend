@@ -328,7 +328,7 @@ export default function TechniciansPage() {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="John Doe"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
+                    className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
                   />
                 </div>
 
@@ -342,7 +342,7 @@ export default function TechniciansPage() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="(555) 123-4567"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
+                    className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
                   />
                 </div>
 
@@ -356,7 +356,7 @@ export default function TechniciansPage() {
                     value={formData.serviceRegion}
                     onChange={handleInputChange}
                     placeholder="West Coast"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
+                    className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
                   />
                 </div>
 
@@ -370,7 +370,7 @@ export default function TechniciansPage() {
                     value={formData.workHours}
                     onChange={handleInputChange}
                     placeholder="8:00 AM - 6:00 PM"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
+                    className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
                   />
                 </div>
 
@@ -383,7 +383,7 @@ export default function TechniciansPage() {
                       type="file"
                       accept="image/*"
                       onChange={handleImageUpload}
-                      className="hidden"
+                      className="hidden text-black"
                       id="profile-upload"
                     />
                     <label htmlFor="profile-upload" className="cursor-pointer">
