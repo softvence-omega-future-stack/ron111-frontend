@@ -256,7 +256,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Advanced Features */}
-          <div className="bg-purple-50 rounded-lg p-6">
+          {/* <div className="bg-purple-50 rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4 pb-8 border-b border-purple-200">
               <Sparkles className="w-5 h-5 text-blue-600" />
               <h2 className="text-lg font-semibold text-gray-800">
@@ -365,7 +365,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Save Button */}
           <div className="flex justify-center md:justify-end gap-3">
