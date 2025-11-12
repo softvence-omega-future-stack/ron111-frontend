@@ -13,7 +13,6 @@ const LoadingSpinner = () => (
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
-    aria-hidden="true"
   >
     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
@@ -23,58 +22,36 @@ const LoadingSpinner = () => (
 export default function LoginPage() {
   const router = useRouter();
 
-  // Initialize from localStorage using lazy state initializers to avoid synchronous setState in effects
-  const [email, setEmail] = useState(() => {
-    if (typeof window === "undefined") return "";
+  // Initialize credentials from localStorage on the client without calling setState inside an effect
+  const getInitialCredentials = () => {
+    if (typeof window === "undefined") {
+      return { email: "", password: "", rememberMe: false };
+    }
     const rememberToken = localStorage.getItem("rememberToken");
-    if (!rememberToken) return "";
+    if (!rememberToken) return { email: "", password: "", rememberMe: false };
     try {
       const decrypted = decryptData(rememberToken);
-      const { email: savedEmail } = JSON.parse(decrypted);
-      return savedEmail ?? "";
+      const { email: savedEmail, password: savedPassword } = JSON.parse(decrypted);
+      return { email: savedEmail ?? "", password: savedPassword ?? "", rememberMe: !!savedEmail };
     } catch {
       localStorage.removeItem("rememberToken");
-      return "";
+      return { email: "", password: "", rememberMe: false };
     }
-  });
+  };
 
-  const [password, setPassword] = useState(() => {
-    if (typeof window === "undefined") return "";
-    const rememberToken = localStorage.getItem("rememberToken");
-    if (!rememberToken) return "";
-    try {
-      const decrypted = decryptData(rememberToken);
-      const { password: savedPassword } = JSON.parse(decrypted);
-      return savedPassword ?? "";
-    } catch {
-      return "";
-    }
-  });
-
-  const [rememberMe, setRememberMe] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const rememberToken = localStorage.getItem("rememberToken");
-    if (!rememberToken) return false;
-    try {
-      const decrypted = decryptData(rememberToken);
-      const { email: savedEmail } = JSON.parse(decrypted);
-      return !!savedEmail;
-    } catch {
-      return false;
-    }
-  });
-
+  const initialCredentials = getInitialCredentials();
+  const [email, setEmail] = useState(initialCredentials.email);
+  const [password, setPassword] = useState(initialCredentials.password);
+  const [rememberMe, setRememberMe] = useState(initialCredentials.rememberMe);
   const [loginUser, { isLoading, isError, data }] = useLoginUserMutation();
 
-  // Effect only handles redirect if already logged in; state is already initialized above
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  console.log(email, password);
+  
 
-    // Redirect to home if already logged in
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      router.replace("/"); // navigate to home
-    }
+  // Keep effect for redirecting if an accessToken exists
+  useEffect(() => {
+    const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+    if (accessToken) router.replace("/");
   }, [router]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -95,7 +72,7 @@ export default function LoginPage() {
           localStorage.removeItem("rememberToken");
         }
 
-        router.replace("/"); // redirect to home without continuous reload
+        router.replace("/");
       } else {
         alert(response?.error || "Login failed.");
       }
@@ -107,7 +84,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo and Title */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mb-3">
             <MapPin className="w-7 h-7 text-white" strokeWidth={2.5} />
@@ -116,7 +92,6 @@ export default function LoginPage() {
           <p className="text-gray-500 text-sm">Smart Job Scheduling Platform</p>
         </div>
 
-        {/* Login Form */}
         <div className="bg-white rounded-lg shadow-sm p-8">
           <form onSubmit={handleLogin}>
             <div className="mb-5">
