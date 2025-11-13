@@ -45,7 +45,6 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(initialCredentials.rememberMe);
   const [loginUser, { isLoading, isError, data }] = useLoginUserMutation();
 
-  console.log(email, password);
   
 
   // Keep effect for redirecting if an accessToken exists

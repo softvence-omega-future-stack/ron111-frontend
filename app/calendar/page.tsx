@@ -312,7 +312,7 @@ const CalendarOverview = () => {
         </div>
 
         {/* Schedule Section */}
-        <div className="bg-white rounded-lg p-4 mb-6 shadow-sm flex flex-col gap-4">
+        <div className="bg-white rounded-lg p-4 mb-6 border border-gray-300 shadow-sm flex flex-col gap-4">
           {/* Top Row */}
           <div className="flex flex-wrap items-center justify-between w-full gap-3">
             {/* Left Side */}
@@ -470,7 +470,7 @@ const CalendarOverview = () => {
                                 </span>
                               </div>
 
-                              <div className="hidden lg:block text-[8px] sm:text-xs text-gray-600 truncate">
+                              <div className="hidden lg:block text-[8px] sm:text-xs text-gray-600 truncate pt-2">
                                 <div className="mb-1">Assigned By</div>
                                 <img
                                   src="/img.png"

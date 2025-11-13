@@ -53,7 +53,7 @@ export default function Navbar() {
             </div>
             <div>
               <h1 className="font-semibold text-gray-800 text-base">
-                Route Optima
+                Dispatch Bros
               </h1>
               <p className="text-xs text-gray-500">Job Scheduling Platform</p>
             </div>
